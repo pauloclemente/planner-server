@@ -1,10 +1,11 @@
 import fastify from 'fastify'
-import { createTrip } from './routes/create-trip'
 import {
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import cors from '@fastify/cors'
+
+import { createTrip } from './routes/create-trip'
 import { confirmTrip } from './routes/confirm-trip'
 import { confirmParticipant } from './routes/confirm-participants'
 import { createActivity } from './routes/create-activity'
@@ -16,14 +17,18 @@ import { createInvite } from './routes/create-invite'
 import { updateTrip } from './routes/update-trip'
 import { getTripDetails } from './routes/get-trip-details'
 import { getParticipant } from './routes/get-participant'
+import { errorHandler } from './error-handler'
+import { env } from './env'
 
 const app = fastify()
 
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
+app.setErrorHandler(errorHandler)
+
 app.register(cors, {
-  origin: true,
+  origin: '*',
 })
 app.register(createTrip)
 app.register(confirmTrip)
@@ -38,6 +43,6 @@ app.register(updateTrip)
 app.register(getTripDetails)
 app.register(getParticipant)
 
-app.listen({ port: 3333 }).then(() => {
+app.listen({ port: env.PORT }).then(() => {
   console.log('listening on port 3333')
 })
