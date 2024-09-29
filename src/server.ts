@@ -6,6 +6,7 @@ import {
 } from 'fastify-type-provider-zod'
 import cors from '@fastify/cors'
 import { confirmTrip } from './routes/confirm-trip'
+import { confirmParticipant } from './routes/confirm-participants'
 
 const app = fastify()
 
@@ -17,6 +18,7 @@ app.register(cors, {
 })
 app.register(createTrip)
 app.register(confirmTrip)
+app.register(confirmParticipant)
 
 app.listen({ port: 3333 }).then(() => {
   console.log('listening on port 3333')
