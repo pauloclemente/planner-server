@@ -6,8 +6,8 @@ import { prisma } from '../lib/prisma'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import 'dayjs/locale/pt-br'
-import { getMailClient } from './mail'
 import nodemailer from 'nodemailer'
+import { getMailClient } from '../lib/mail'
 
 dayjs.locale('pt-br')
 dayjs.extend(localizedFormat)
@@ -67,11 +67,11 @@ export async function createTrip(app: FastifyInstance) {
         },
       })
 
-      const mail = await getMailClient()
-
       const formattedStartDate = dayjs(starts_at).format('LL')
       const formattedEndDate = dayjs(ends_at).format('LL')
       const confimationLink = `http://localhost:3333/trips/${trip.id}/confirm`
+
+      const mail = await getMailClient()
 
       const message = await mail.sendMail({
         from: {
